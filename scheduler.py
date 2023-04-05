@@ -5,6 +5,8 @@ from sqlalchemy.orm import sessionmaker
 from datetime import time, datetime
 import time as tm
 from app import Task
+from api_gateway import * 
+import json
 # from jobs import get_idn_tasks
 
 # CONNECT TO THE DATABASE FROM THE SCHEDULER
@@ -23,25 +25,36 @@ def query_task():
 
 # FUNCTION THAT RETURNS THE LIST QUERIED
 def print_list(task_list):
+    print("------------------------------------------------")
+    print('Database')
+    print("------------------------")
     for t in task_list:
         print(t.name)
         print(t.exec_time)
         print(t.active_status)
         print("------------------------")
     print("------------------------------------------------")
-    
 
+def print_gateway_list(task_list):
+    l = json.loads(task_list)
+    print("------------------------------------------------")
+    print('Gateway')
+    print("------------------------")
+    for i in range(len(l)):
+        # print(l[i]['id'])
+        print(l[i]['name'])
+        print(l[i]['exec_time'])
+        print(l[i]['active_status'])
+        print("------------------------")
+    print("------------------------------------------------")
+    
+# QUERY ALL THE TASKS FROM THE DATABASE FREQUENTLY TO STAY UP TO DATE
 scheduler.add_job(id='query_list', func=query_task, trigger='interval', seconds=5)
 scheduler.add_job(id='get_list', func=lambda: print_list(tasks), trigger='interval', seconds=10)
 
-# scheduler.add_job(id='job1', func=job1, trigger='cron', hour= 15, minute=15)
+# ASKS THE GATEWAY API FOR NEW TASKS
+new_tasks = get_tasks_list()
+scheduler.add_job(id='gateway_list', func=lambda: print_gateway_list(new_tasks), trigger='interval', seconds=5)
 
-# def pass_to_scheduler(props):
-#     scheduler = APScheduler()
-#     for p in props:
-#         tm = (p.exec_time).split(":")
-#         h = tm[0]
-#         m = tm[1]
-        # scheduler.add_job(id=p.name, func=p.name, trigger='cron', hour=h, minute=m)
-        # print (p.name, p.active_status, h, m)
+
     

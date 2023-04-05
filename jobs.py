@@ -1,27 +1,5 @@
 from scheduler import scheduler
 
-# TASK FILE EXAMPLE
-retrieved_file=[
-
-    {
-        'id':100,
-        'name': "job16",
-        'active_status': "deactivated",
-        'exec_time': "16:30"
-    },
-    {
-        'id':200,
-        'name': "job18",
-        'active_status': "deactivated",
-        'exec_time': "16:30"
-    },
-    {
-        'id':300,
-        'name': "job19",
-        'active_status': "deactivated",
-        'exec_time': "16:30"
-    }
-]
 
 
 
