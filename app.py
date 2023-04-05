@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api, marshal_with, fields
 from flask_sqlalchemy import SQLAlchemy
-from scheduler import *
+# from scheduler import *
+from jobs import *
 
 app = Flask(__name__)
 api = Api(app)
@@ -89,7 +90,7 @@ class OneTaskStatus(Resource):
         db.session.commit()
         return task
 
-
+# API ENDPOINTS
 api.add_resource(AllTasks, '/tasks')
 api.add_resource(OneTask, '/task/<int:pk>')
 api.add_resource(OneTaskStatus, '/status/task/<int:pk>')
@@ -100,10 +101,6 @@ api.add_resource(OneTaskStatus, '/status/task/<int:pk>')
 def create_tables():
     db.create_all()
 
-scheduler.start() 
-# with app.app_context():
-#     props = Task.query.all()
-#     pass_to_scheduler(props)
-
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=True)
+    start_scheduler()
+    app.run(debug=True, use_reloader=False)
