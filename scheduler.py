@@ -12,7 +12,7 @@ import json
 # CONNECT TO THE DATABASE FROM THE SCHEDULER
 engine = create_engine('sqlite:///instance/tasks.db')
 Session = sessionmaker(bind=engine)
-session = Session()
+# session = Session()
 
 # INIT
 tasks = None
@@ -20,8 +20,10 @@ scheduler = APScheduler()
 
 # FUNCTION THAT QUERIES THE LIST FROM THE DATABASE
 def query_task():
+    session = Session()
     global tasks
     tasks = session.query(Task).all()
+    session.close()
 
 # FUNCTION THAT RETURNS THE LIST QUERIED
 def print_list(task_list):
@@ -54,7 +56,7 @@ scheduler.add_job(id='get_list', func=lambda: print_list(tasks), trigger='interv
 
 # ASKS THE GATEWAY API FOR NEW TASKS
 new_tasks = get_tasks_list()
-scheduler.add_job(id='gateway_list', func=lambda: print_gateway_list(new_tasks), trigger='interval', seconds=5)
+scheduler.add_job(id='gateway_list', func=lambda: print_gateway_list(new_tasks), trigger='interval', seconds=13)
 
 
     
