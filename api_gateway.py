@@ -2,7 +2,6 @@
 retrieved_file = None
 # TASK FILE EXAMPLE
 def init_file():
-
     global retrieved_file
     retrieved_file="""[
 
